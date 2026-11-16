@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MY MONEY</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101827;color:white;font-family:Arial;padding-bottom:30px}
+header{text-align:center;background:#19263d;padding:25px}
+header h1{color:#50d6a7;font-size:34px}
+header p{color:#b9c6da}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:15px}
+button{border:0;border-radius:12px;padding:14px;background:#263751;color:white;font-size:15px}
+button.active{background:#159d75}
+main{padding:15px}
+section{display:none}
+section.active{display:block}
+h2{color:#50d6a7}
+h3{color:#50d6a7}
+.card,.entry{background:#1e2d43;padding:18px;border-radius:15px;margin:12px 0}
+input,select{width:100%;padding:15px;margin:7px 0;background:#293950;color:white;border:1px solid #536780;border-radius:10px;font-size:16px}
+.save{background:#079b70;width:100%;margin-top:12px;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#263751;padding:15px;border-radius:12px}
+.stat strong{display:block;font-size:21px;margin-top:8px;color:#50d6a7}
+.entry button{background:#9b3d45;padding:8px}
+</style>
+</head>
+<body>
+<header>
+<h1>MY MONEY</h1>
+<p>PERSONAL FINANCE MANAGER</p>
+</header>
+
+<nav>
+<button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('income')">Income</button>
+<button onclick="show('expense')">Expense</button>
+<button onclick="show('vehicle')">Vehicle</button>
+<button onclick="show('loan')">Loans EMI</button>
+<button onclick="show('savings')">Savings</button>
+<button onclick="show('family')">Family</button>
+<button onclick="show('bank')">Bank</button>
+<button onclick="show('reports')">Reports</button>
+<button onclick="show('history')">History</button>
+</nav>
+
+<main>
+
+<section id="dashboard" class="active">
+<h2>Dashboard</h2>
+<div class="grid">
+<div class="stat">Personal Income<strong id="dIncome">₹0</strong></div>
+<div class="stat">Personal Expense<strong id="dExpense">₹0</strong></div>
+<div class="stat">Vehicle Income<strong id="dVIncome">₹0</strong></div>
+<div class="stat">Vehicle Expense<strong id="dVExpense">₹0</strong></div>
+<div class="stat">Vehicle Profit<strong id="dProfit">₹0</strong></div>
+<div class="stat">Total KM<strong id="dKM">0</strong></div>
+</div>
+<div class="card"><h3>MY MONEY</h3><p id="today"></p></div>
+</section>
+
+<section id="income">
+<h2>Daily Income</h2>
+<div class="card">
+<input type="date" id="iDate">
+<input id="iSource" placeholder="Income Source">
+<input type="number" id="iAmount" placeholder="Income Amount ₹">
+<input id="iNote" placeholder="Notes">
+<button class="save" onclick="addPersonal('income')">Save Income</button>
+</div>
+</section>
+
+<section id="expense">
+<h2>Daily Expense</h2>
+<div class="card">
+<input type="date" id="eDate">
+<select id="eCategory">
+<option>Food</option><option>House</option><option>Medical</option>
+<option>Travel</option><option>Shopping</option><option>EMI</option>
+<option>Other</option>
+</select>
+<input type="number" id="eAmount" placeholder="Expense Amount ₹">
+<input id="eNote" placeholder="Description">
+<button class="save" onclick="addPersonal('expense')">Save Expense</button>
+</div>
+</section>
+
+<section id="vehicle">
+<h2>Tata Ace Vehicle Expense</h2>
+<div class="card">
+<h3>Tata Ace Gold Diesel - 2018</h3>
+<input type="date" id="vDate">
+<input type="number" id="startKM" placeholder="Starting KM">
+<input type="number" id="endKM" placeholder="Ending KM">
+<input type="number" id="dieselLitres" placeholder="Diesel Litres">
+<input type="number" id="dieselAmount" placeholder="Diesel Amount ₹">
+<input type="number" id="repair" placeholder="Repair & Service ₹">
+<input type="number" id="insurance" placeholder="Insurance ₹">
+<input type="number" id="permit" placeholder="Permit / FC ₹">
+<input type="number" id="toll" placeholder="Toll & Parking ₹">
+<input type="number" id="other" placeholder="Other Expenses ₹">
+<input type="number" id="vIncome" placeholder="Transport Income ₹">
+<input id="vNote" placeholder="Trip / Customer Details">
+<button class="save" onclick="saveVehicle()">Save Vehicle Entry</button>
+</div>
+</section>
+
+<section id="loan">
+<h2>Loans & EMI Tracking</h2>
+<div class="card">
+<input type="date" id="lDate">
+<input id="lName" placeholder="Loan / Bank Name">
+<input type="number" id="lTotal" placeholder="Total Loan ₹">
+<input type="number" id="lEMI" placeholder="Monthly EMI ₹">
+<input type="date" id="lDue">
+<button class="save" onclick="addLoan()">Save Loan</button>
+</div>
+</section>
+
+<section id="savings">
+<h2>Savings Tracking</h2>
+<div class="card">
+<input type="date" id="sDate">
+<input id="sName" placeholder="Savings Name">
+<input type="number" id="sAmount" placeholder="Savings Amount ₹">
+<button class="save" onclick="addSimple('savings','sDate','sName','sAmount')">Save Savings</button>
+</div>
+</section>
+
+<section id="family">
+<h2>Family Expenses</h2>
+<div class="card">
+<input type="date" id="fDate">
+<input id="fName" placeholder="Family Member / Expense">
+<input type="number" id="fAmount" placeholder="Amount ₹">
+<button class="save" onclick="addSimple('family','fDate','fName','fAmount')">Save Family Expense</button>
+</div>
+</section>
+
+<section id="bank">
+<h2>Multiple Bank Accounts</h2>
+<div class="card">
+<input id="bName" placeholder="Bank Name">
+<input id="bAccount" placeholder="Account Nickname / Last 4 Digits">
+<input type="number" id="bBalance" placeholder="Current Balance ₹">
+<button class="save" onclick="addBank()">Save Bank Account</button>
+</div>
+</section>
+
+<section id="reports">
+<h2>Daily & Monthly Reports</h2>
+<div class="card">
+<h3>Daily Vehicle Report</h3>
+<p id="dailyReport"></p>
+</div>
+<div class="card">
+<h3>Monthly Vehicle Report</h3>
+<p id="monthlyReport"></p>
+</div>
+<div class="card">
+<h3>Personal Finance Report</h3>
+<p id="personalReport"></p>
+</div>
+<button class="save" onclick="backup()">Download Excel Backup (CSV)</button>
+</section>
+
+<section id="history">
+<h2>Entry History</h2>
+<select id="filter" onchange="renderHistory()">
+<option value="all">All Records</option>
+<option value="income">Income</option>
+<option value="expense">Expense</option>
+<option value="vehicle">Vehicle</option>
+<option value="loan">Loan</option>
+<option value="savings">Savings</option>
+<option value="family">Family</option>
+<option value="bank">Bank</option>
+</select>
+<div id="historyList"></div>
+</section>
+</main>
+
+<script>
+const KEY='MY_MONEY_V2_DATA';
+let records=[];
+try{records=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){records=[]}
+
+function persist(){
+localStorage.setItem(KEY,JSON.stringify(records));
+update();
+}
+function val(id){return Number(document.getElementById(id).value)||0}
+function str(id){return document.getElementById(id).value.trim()}
+function date(id){return document.getElementById(id).value||new Date().toISOString().slice(0,10)}
+function money(n){return '₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
+
+function show(id){
+document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+update();
+}
+function saveRecord(obj){
+records.push({id:Date.now()+Math.random(),...obj});
+persist();
+alert('Saved Successfully!');
+}
+function addPersonal(type){
+let p=type==='income'?'i':'e';
+let amount=val(p+'Amount');
+if(amount<=0){alert('Enter amount');return}
+saveRecord({
+type,date:date(p+'Date'),
+name:str(p+(type==='income'?'Source':'Note'))||type,
+amount,
+category:type==='expense'?str('eCategory'):''
+});
+}
+function saveVehicle(){
+let start=val('startKM'),end=val('endKM');
+if(end<=start){alert('Check Starting and Ending KM');return}
+if(val('vIncome')<=0){alert('Enter Transport Income');return}
+saveRecord({
+type:'vehicle',date:date('vDate'),
+startKM:start,endKM:end,km:end-start,
+litres:val('dieselLitres'),
+diesel:val('dieselAmount'),
+repair:val('repair'),
+insurance:val('insurance'),
+permit:val('permit'),
+toll:val('toll'),
+other:val('other'),
+income:val('vIncome'),
+note:str('vNote')
+});
+}
+function expenseOf(r){
+return ['diesel','repair','insurance','permit','toll','other']
+.reduce((a,k)=>a+(Number(r[k])||0),0);
+}
+function addLoan(){
+if(!str('lName')||val('lEMI')<=0){alert('Enter loan name and EMI');return}
+saveRecord({
+type:'loan',date:date('lDate'),
+name:str('lName'),total:val('lTotal'),
+emi:val('lEMI'),due:date('lDue')
+});
+}
+function addSimple(type,d,n,a){
+if(!str(n)||val(a)<=0){alert('Enter details and amount');return}
+saveRecord({type,date:date(d),name:str(n),amount:val(a)});
+}
+function addBank(){
+if(!str('bName')){alert('Enter bank name');return}
+saveRecord({
+type:'bank',name:str('bName'),
+account:str('bAccount'),balance:val('bBalance')
+});
+}
+function report(list){
+let income=list.reduce((a,r)=>a+(Number(r.income)||0),0);
+let expense=list.reduce((a,r)=>a+expenseOf(r),0);
+let km=list.reduce((a,r)=>a+(Number(r.km)||0),0);
+let diesel=list.reduce((a,r)=>a+(Number(r.diesel)||0),0);
+let litres=list.reduce((a,r)=>a+(Number(r.litres)||0),0);
+return {income,expense,profit:income-expense,km,diesel,litres};
+}
+function update(){
+const pi=records.filter(r=>r.type==='income').reduce((a,r)=>a+r.amount,0);
+const pe=records.filter(r=>r.type==='expense'||r.type==='family').reduce((a,r)=>a+r.amount,0);
+const vehicles=records.filter(r=>r.type==='vehicle');
+const all=report(vehicles);
+const today=new Date().toLocaleDateString('en-CA');
+const month=today.slice(0,7);
+const d=report(vehicles.filter(r=>r.date===today));
+const m=report(vehicles.filter(r=>r.date&&r.date.startsWith(month)));
+
+document.getElementById('dIncome').textContent=money(pi);
+document.getElementById('dExpense').textContent=money(pe);
+document.getElementById('dVIncome').textContent=money(all.income);
+document.getElementById('dVExpense').textContent=money(all.expense);
+document.getElementById('dProfit').textContent=money(all.profit);
+document.getElementById('dKM').textContent=all.km+' KM';
+document.getElementById('today').textContent='Today: '+today;
+
+document.getElementById('dailyReport').innerHTML=
+`Income: ${money(d.income)}<br>Expenses: ${money(d.expense)}<br>
+<b>Daily Profit: ${money(d.profit)}</b><br>KM: ${d.km}<br>
+Diesel: ${d.litres} L / ${money(d.diesel)}<br>
+Diesel Cost/KM: ${money(d.km?d.diesel/d.km:0)}`;
+
+document.getElementById('monthlyReport').innerHTML=
+`Income: ${money(m.income)}<br>Expenses: ${money(m.expense)}<br>
+<b>Monthly Profit: ${money(m.profit)}</b><br>KM: ${m.km}<br>
+Diesel: ${m.litres} L / ${money(m.diesel)}<br>
+Diesel Cost/KM: ${money(m.km?m.diesel/m.km:0)}`;
+
+document.getElementById('personalReport').innerHTML=
+`Personal Income: ${money(pi)}<br>
+Personal Expense: ${money(pe)}<br>
+Balance: ${money(pi-pe)}<br>
+Savings: ${money(records.filter(r=>r.type==='savings').reduce((a,r)=>a+r.amount,0))}<br>
+Total Loan EMI: ${money(records.filter(r=>r.type==='loan').reduce((a,r)=>a+r.emi,0))}`;
+renderHistory();
+}
+function renderHistory(){
+let filter=document.getElementById('filter').value;
+let list=records.filter(r=>filter==='all'||r.type===filter).slice().reverse();
+document.getElementById('historyList').innerHTML=list.map(r=>
+`<div class="entry"><b>${r.type.toUpperCase()}</b> - ${r.date||''}<br>
+${r.name||r.note||''}<br>
+${r.type==='vehicle'?
+'KM: '+r.km+' | Income: '+money(r.income)+' | Expense: '+money(expenseOf(r))+' | Profit: '+money(r.income-expenseOf(r)):
+r.type==='loan'?'EMI: '+money(r.emi):
+r.type==='bank'?'Balance: '+money(r.balance):money(r.amount)}
+<br><button onclick="deleteRecord('${r.id}')">Delete</button></div>`
+).join('')||'No Records Found';
+}
+function deleteRecord(id){
+if(confirm('Delete this record?')){
+records=records.filter(r=>String(r.id)!==id);
+persist();
+}
+}
+function backup(){
+let rows=[['Type','Date','Name','Income','Expense','KM','Diesel Litres','Diesel','Repair','Insurance','Permit','Toll','Other','Profit','EMI','Balance']];
+records.forEach(r=>rows.push([
+r.type,r.date||'',r.name||r.note||'',r.income||r.amount||0,
+r.type==='vehicle'?expenseOf(r):0,r.km||0,r.litres||0,
+r.diesel||0,r.repair||0,r.insurance||0,r.permit||0,
+r.toll||0,r.other||0,
+r.type==='vehicle'?r.income-expenseOf(r):'',
+r.emi||'',r.balance||''
+]));
+let csv='\uFEFF'+rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');
+let blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+let url=URL.createObjectURL(blob);
+let a=document.createElement('a');
+a.href=url;a.download='MY_MONEY_Backup.csv';a.click();
+URL.revokeObjectURL(url);
+}
+['iDate','eDate','vDate','lDate','sDate','fDate'].forEach(id=>{
+document.getElementById(id).value=new Date().toISOString().slice(0,10);
+});
+update();
+</script>
+</body>
+</html>
+

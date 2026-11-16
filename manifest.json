@@ -1,0 +1,12 @@
+
+{
+  "name": "MY MONEY",
+  "short_name": "MY MONEY",
+  "description": "Personal Finance Manager",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101827",
+  "theme_color": "#101827"
+}
